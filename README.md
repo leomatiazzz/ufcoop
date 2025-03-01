@@ -1,3 +1,5 @@
+**(O LINK PARA O RELATÓRIO SE ENCONTRA AO LADO, EM ABOUT)**
+
 # 🎓 UFCoop - UFC Cooperation - Gerenciamento de Atividades Acadêmicas
 
 Este projeto é uma plataforma web desenvolvida em **React com TypeScript** para o **cadastro e monitoramento de atividades acadêmicas** dentro do campus da **UFC Sobral**.
