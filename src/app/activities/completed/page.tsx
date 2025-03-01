@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 interface Activity {
   id: number;
-  title: string;
+  name: string; // Era title, corrigido para name
   description: string;
 }
 
@@ -12,7 +12,6 @@ export default function CompletedActivities() {
     []
   );
 
-  // Carregar atividades concluídas do localStorage ao montar o componente
   useEffect(() => {
     const storedActivities = localStorage.getItem("completedActivities");
     if (storedActivities) {
@@ -22,9 +21,9 @@ export default function CompletedActivities() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Tarefas Concluídas</h1>
+      <h1 className="text-2xl font-bold mb-4">Atividades Concluídas</h1>
       {completedActivities.length === 0 ? (
-        <p>Não há novas atividades anunciadas no momento.</p>
+        <p>Não há novas atividades concluídas no momento.</p>
       ) : (
         <ul>
           {completedActivities.map((activity) => (
@@ -32,7 +31,7 @@ export default function CompletedActivities() {
               key={activity.id}
               className="border p-4 rounded mb-2 bg-green-100"
             >
-              <h2 className="text-lg font-semibold">{activity.title}</h2>
+              <h2 className="text-lg font-semibold">{activity.name}</h2>
               <p>{activity.description}</p>
             </li>
           ))}

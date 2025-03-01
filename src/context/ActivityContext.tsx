@@ -56,11 +56,17 @@ export function ActivityProvider({ children }: { children: React.ReactNode }) {
   };
 
   const completeActivity = (id: number) => {
-    setActivities((prev) =>
-      prev.map((activity) =>
+    setActivities((prev) => {
+      const updatedActivities = prev.map((activity) =>
         activity.id === id ? { ...activity, completed: true } : activity
-      )
-    );
+      );
+
+      // Separar atividades concluídas
+      const completed = updatedActivities.filter((act) => act.completed);
+      localStorage.setItem("completedActivities", JSON.stringify(completed));
+
+      return updatedActivities;
+    });
   };
 
   return (
