@@ -176,7 +176,7 @@ export default function CreateActivity() {
         </div>
 
         <div>
-          <label className="block font-medium">Categoria</label>
+          <label className="block font-medium">Curso</label>
           <select
             name="category"
             value={formData.category}
@@ -190,7 +190,7 @@ export default function CreateActivity() {
             className="w-full p-2 border rounded"
             required
           >
-            <option value="">Selecione uma categoria</option>
+            <option value="">Selecione um curso</option>
             {Object.keys(subcategories).map((category) => (
               <option key={category} value={category}>
                 {category}

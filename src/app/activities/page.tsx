@@ -23,18 +23,23 @@ export default function ActivitiesPage() {
         {activities.length > 0 ? (
           <div>
             {[...new Set(activities.map((activity) => activity.category))].map(
-              (category) => (
-                <div key={category} className="mb-6">
-                  <h2 className="text-xl font-semibold mb-2 text-blue-500">
-                    {category}
-                  </h2>
-                  <ul>
-                    {activities
-                      .filter(
-                        (activity) =>
-                          activity.category === category && !activity.completed
-                      )
-                      .map((activity) => (
+              (category) => {
+                const filteredActivities = activities.filter(
+                  (activity) =>
+                    activity.category === category && !activity.completed
+                );
+
+                if (filteredActivities.length === 0) {
+                  return null; // Não renderiza a categoria vazia
+                }
+
+                return (
+                  <div key={category} className="mb-6">
+                    <h2 className="text-xl font-semibold mb-2 text-blue-500">
+                      {category}
+                    </h2>
+                    <ul>
+                      {filteredActivities.map((activity) => (
                         <li
                           key={activity.id}
                           className="border p-4 mb-2 rounded flex justify-between items-center"
@@ -72,9 +77,10 @@ export default function ActivitiesPage() {
                           </div>
                         </li>
                       ))}
-                  </ul>
-                </div>
-              )
+                    </ul>
+                  </div>
+                );
+              }
             )}
           </div>
         ) : (
