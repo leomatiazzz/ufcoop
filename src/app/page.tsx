@@ -8,10 +8,10 @@ export default function HomePage() {
       style={{ backgroundImage: "url('/campus.jpg')" }}
     >
       {/* Container com fundo azul claro */}
-      <div className="bg-purple-200 p-6 rounded-lg shadow-lg flex flex-col items-center">
+      <div className="bg-blue-200 p-6 rounded-lg shadow-lg flex flex-col items-center">
         {/* Imagem centralizada acima do título */}
         <Image
-          src="/formatura.png" // Caminho para a imagem na pasta public
+          src="/favicon.png" // Caminho para a imagem na pasta public
           alt="Imagem de formatura" // Descrição alternativa para a imagem
           width={200} // Largura da imagem (ajuste conforme necessário)
           height={200} // Altura da imagem (ajuste conforme necessário)

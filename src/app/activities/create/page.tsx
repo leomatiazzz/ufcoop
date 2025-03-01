@@ -2,19 +2,51 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useActivity } from "@/context/ActivityContext";
 
 export default function CreateActivity() {
   const router = useRouter();
+  const { addActivity } = useActivity();
+
   const [formData, setFormData] = useState({
     name: "",
     responsibleType: "",
     responsible: "",
     registrationNumber: "",
     date: "",
+    activityType: "",
     category: "",
     subcategory: "",
     description: "",
   });
+
+  const subcategories: Record<string, string[]> = {
+    "Engenharia Elétrica": ["Circuitos", "Energias Renováveis", "Automação"],
+    "Engenharia de Computação": [
+      "Programação",
+      "Redes",
+      "Inteligência Artificial",
+    ],
+    Música: ["Canto", "Instrumentos", "Composição"],
+    Psicologia: ["Clínica", "Organizacional", "Neuropsicologia"],
+    "Ciências Econômicas & Finanças": [
+      "Macroeconomia",
+      "Mercado Financeiro",
+      "Empreendedorismo",
+    ],
+    "Odontologia & Medicina": ["Ortodontia", "Pediatria", "Cardiologia"],
+  };
+
+  const activityTypes = [
+    "Workshop",
+    "Monitoria",
+    "Palestra",
+    "Minicurso",
+    "Capacitação",
+    "Maratona",
+    "Apresentação",
+    "Outro",
+  ];
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -27,7 +59,6 @@ export default function CreateActivity() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validação da matrícula se for aluno
     if (
       formData.responsibleType === "Aluno" &&
       !/^\d{6}$/.test(formData.registrationNumber)
@@ -36,10 +67,22 @@ export default function CreateActivity() {
       return;
     }
 
-    // Simula o envio da atividade
-    console.log("Atividade criada:", formData);
+    const newActivity = {
+      id: Date.now(),
+      name: formData.name,
+      responsibleType: formData.responsibleType,
+      responsible: formData.responsible,
+      registrationNumber:
+        formData.responsibleType === "Aluno" ? formData.registrationNumber : "",
+      date: formData.date,
+      activityType: formData.activityType,
+      category: formData.category,
+      subcategory: formData.subcategory,
+      description: formData.description,
+      completed: false,
+    };
 
-    // Redireciona para a lista de atividades
+    addActivity(newActivity);
     router.push("/activities");
   };
 
@@ -48,9 +91,7 @@ export default function CreateActivity() {
       <h1 className="text-2xl font-bold text-blue-600 mb-4">
         Criar Nova Atividade
       </h1>
-
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Nome da Atividade */}
         <div>
           <label className="block font-medium">Nome da Atividade</label>
           <input
@@ -63,9 +104,8 @@ export default function CreateActivity() {
           />
         </div>
 
-        {/* Tipo de Responsável */}
         <div>
-          <label className="block font-medium">Responsável</label>
+          <label className="block font-medium">Tipo de Responsável</label>
           <select
             name="responsibleType"
             value={formData.responsibleType}
@@ -74,14 +114,13 @@ export default function CreateActivity() {
             required
           >
             <option value="">Selecione</option>
-            <option value="Professor">Professor</option>
             <option value="Aluno">Aluno</option>
+            <option value="Professor">Professor</option>
           </select>
         </div>
 
-        {/* Nome do Responsável */}
         <div>
-          <label className="block font-medium">Nome do Responsável</label>
+          <label className="block font-medium">Responsável</label>
           <input
             type="text"
             name="responsible"
@@ -92,26 +131,20 @@ export default function CreateActivity() {
           />
         </div>
 
-        {/* Número de Matrícula (Aparece apenas se for Aluno) */}
         {formData.responsibleType === "Aluno" && (
           <div>
-            <label className="block font-medium">
-              Número de Matrícula (6 dígitos)
-            </label>
+            <label className="block font-medium">Número de Matrícula</label>
             <input
               type="text"
               name="registrationNumber"
               value={formData.registrationNumber}
               onChange={handleChange}
               className="w-full p-2 border rounded"
-              pattern="\d{6}"
-              maxLength={6}
               required
             />
           </div>
         )}
 
-        {/* Data */}
         <div>
           <label className="block font-medium">Data</label>
           <input
@@ -124,33 +157,48 @@ export default function CreateActivity() {
           />
         </div>
 
-        {/* Categoria */}
+        <div>
+          <label className="block font-medium">Tipo de Atividade</label>
+          <select
+            name="activityType"
+            value={formData.activityType}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          >
+            <option value="">Selecione um tipo</option>
+            {activityTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label className="block font-medium">Categoria</label>
           <select
             name="category"
             value={formData.category}
-            onChange={handleChange}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                category: e.target.value,
+                subcategory: "",
+              });
+            }}
             className="w-full p-2 border rounded"
             required
           >
             <option value="">Selecione uma categoria</option>
-            <option value="Engenharia Elétrica">Engenharia Elétrica</option>
-            <option value="Engenharia de Computação">
-              Engenharia de Computação
-            </option>
-            <option value="Música">Música</option>
-            <option value="Psicologia">Psicologia</option>
-            <option value="Ciências Econômicas & Finanças">
-              Ciências Econômicas & Finanças
-            </option>
-            <option value="Odontologia & Medicina">
-              Odontologia & Medicina
-            </option>
+            {Object.keys(subcategories).map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* Subcategoria */}
         <div>
           <label className="block font-medium">Subcategoria</label>
           <select
@@ -159,19 +207,18 @@ export default function CreateActivity() {
             onChange={handleChange}
             className="w-full p-2 border rounded"
             required
+            disabled={!formData.category}
           >
             <option value="">Selecione uma subcategoria</option>
-            <option value="Monitoria">Monitoria</option>
-            <option value="Palestra">Palestra</option>
-            <option value="Workshop">Workshop</option>
-            <option value="Apresentação">Apresentação</option>
-            <option value="Capacitação">Capacitação</option>
-            <option value="Minicurso">Minicurso</option>
-            <option value="Outro">Outro</option>
+            {formData.category &&
+              subcategories[formData.category]?.map((subcategory) => (
+                <option key={subcategory} value={subcategory}>
+                  {subcategory}
+                </option>
+              ))}
           </select>
         </div>
 
-        {/* Descrição */}
         <div>
           <label className="block font-medium">Descrição</label>
           <textarea
@@ -184,10 +231,9 @@ export default function CreateActivity() {
           ></textarea>
         </div>
 
-        {/* Botão de Envio */}
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+          className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700"
         >
           Criar Atividade
         </button>
