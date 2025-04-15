@@ -9,7 +9,6 @@ class MyDocument extends Document {
         {" "}
         {/* Definindo o idioma do site */}
         <Head>
-          {/* Aqui você pode adicionar links para fontes, metatags, favicon, etc. */}
           <link rel="icon" href="/favicon.ico" />
           <link
             href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap"
@@ -17,8 +16,8 @@ class MyDocument extends Document {
           />
         </Head>
         <body>
-          <Main /> {/* Renderiza o conteúdo da sua página */}
-          <NextScript /> {/* Script necessário para o Next.js */}
+          <Main /> 
+          <NextScript /> 
         </body>
       </Html>
     );
